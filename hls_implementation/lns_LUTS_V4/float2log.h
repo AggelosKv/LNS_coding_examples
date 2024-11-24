@@ -17,7 +17,7 @@ void CCS_BLOCK(LUT_float2log)(ac_fixed< W, I, true> &float_num, ac_fixed< W, I, 
     ac_fixed< W, I, true> comp_float_num2;
 
     // Check if the first 3 bits are 000
-    if ( float_num[I-1] == 0 &&  float_num[I-2] == 0 &&  float_num[I-3] == 0 ) {
+    if ( float_num.slc<3>(W-I-3) == 0 ) {
 
         // Prepare first array (f>>1)
         shift_float_num1 = float_num>>1;
@@ -37,7 +37,7 @@ void CCS_BLOCK(LUT_float2log)(ac_fixed< W, I, true> &float_num, ac_fixed< W, I, 
     }
     
     // Check if the first 3 bits are 001
-    else if ( float_num[I-1] == 0 &&  float_num[I-2] == 0 &&  float_num[I-3] == 1 ) {
+    else if ( float_num.slc<3>(W-I-3) == 1 ) {
 
         // Prepare first array (f>>1)
         shift_float_num1 = float_num>>1;
@@ -55,7 +55,7 @@ void CCS_BLOCK(LUT_float2log)(ac_fixed< W, I, true> &float_num, ac_fixed< W, I, 
 
     }
     // Check if the first 3 bits are 010
-    else if ( float_num[I-1] == 0 &&  float_num[I-2] == 1 &&  float_num[I-3] == 0 ) {
+    else if ( float_num.slc<3>(W-I-3) == 2 ) {
 
         // Prepare first array (f>>2)
         shift_float_num1 = float_num>>2;
@@ -73,7 +73,7 @@ void CCS_BLOCK(LUT_float2log)(ac_fixed< W, I, true> &float_num, ac_fixed< W, I, 
 
     }
      // Check if the first 3 bits are 011
-    else if ( float_num[I-1] == 0 &&  float_num[I-2] == 1 &&  float_num[I-3] == 1 ) {
+    else if ( float_num.slc<3>(W-I-3) == 3 ) {
 
 
         // Prepare first array (~f>>8)
@@ -85,7 +85,7 @@ void CCS_BLOCK(LUT_float2log)(ac_fixed< W, I, true> &float_num, ac_fixed< W, I, 
 
     }
      // Check if the first 3 bits are 100
-    else if ( float_num[I-1] == 1 &&  float_num[I-2] == 0 &&  float_num[I-3] == 0 ) {
+    else if ( float_num.slc<3>(W-I-3) == 4 ) {
 
         // Prepare first array (f>>4)
         shift_float_num1 = float_num>>4;
@@ -103,7 +103,7 @@ void CCS_BLOCK(LUT_float2log)(ac_fixed< W, I, true> &float_num, ac_fixed< W, I, 
 
     }
     // Check if the first 3 bits are 101
-    else if ( float_num[I-1] == 1 &&  float_num[I-2] == 0 &&  float_num[I-3] == 1 ) {
+    else if ( float_num.slc<3>(W-I-3) == 5 ) {
 
         // Prepare first array (~f>>3)
         comp_float_num1 = float_num>>3;
@@ -118,7 +118,7 @@ void CCS_BLOCK(LUT_float2log)(ac_fixed< W, I, true> &float_num, ac_fixed< W, I, 
 
     }
     // Check if the first 3 bits are 110
-    else if ( float_num[I-1] == 1 &&  float_num[I-2] == 1 &&  float_num[I-3] == 0 ) {
+    else if ( float_num.slc<3>(W-I-3) == 6 ) {
 
         // Prepare first array (f>>4)
         shift_float_num1 = float_num>>4;
@@ -136,7 +136,7 @@ void CCS_BLOCK(LUT_float2log)(ac_fixed< W, I, true> &float_num, ac_fixed< W, I, 
 
     }
     // Check if the first 3 bits are 111
-    else if ( float_num[I-1] == 1 &&  float_num[I-2] == 1 &&  float_num[I-3] == 1 ) {
+    else if ( float_num.slc<3>(W-I-3) == 7 ) {
 
         // Prepare first array (~f>>2)
         comp_float_num1 = float_num >> 2;

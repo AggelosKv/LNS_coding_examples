@@ -4,14 +4,16 @@
 // This function performs the piecewise aproximation to convert the fractional part of a float number to int logarithmic aproximate
 // The input range is only the fraction part 0 <= f < 1 and it is divided in 8 equal spaces
 void float2log_LUT(ac_fixed< W, I, true> &float_num){
-    //std::cout << "The float part first three bit were : " <<float_num[I-1] << float_num[I-2] << float_num[I-3] <<"\n";
+    std::cout << "The float part first three bit were : " <<float_num[I-1] << float_num[I-2] << float_num[I-3] <<"\n";    
+
+    std::cout << "The float part first three bit were : " <<abs(float_num.slc<3>(W-I-3)) <<"\n";
 
     ac_fixed< W, I, true> shift_float_num1;
     ac_fixed< W, I, true> comp_float_num1;
     ac_fixed< W, I, true> comp_float_num2;
 
     // Check if the first 3 bits are 000
-    if ( float_num[I-1] == 0 &&  float_num[I-2] == 0 &&  float_num[I-3] == 0 ) {
+    if ( float_num.slc<4>(W-I-3) == 0 ) {
 
         // Prepare first array (f>>1)
         shift_float_num1 = float_num>>1;
@@ -31,7 +33,7 @@ void float2log_LUT(ac_fixed< W, I, true> &float_num){
     }
     
     // Check if the first 3 bits are 001
-    else if ( float_num[I-1] == 0 &&  float_num[I-2] == 0 &&  float_num[I-3] == 1 ) {
+    else if ( float_num.slc<4>(W-I-3) == 1 ) {
 
         // Prepare first array (f>>1)
         shift_float_num1 = float_num>>1;
@@ -49,7 +51,7 @@ void float2log_LUT(ac_fixed< W, I, true> &float_num){
 
     }
     // Check if the first 3 bits are 010
-    else if ( float_num[I-1] == 0 &&  float_num[I-2] == 1 &&  float_num[I-3] == 0 ) {
+    else if ( float_num.slc<4>(W-I-3) == 2 ) {
 
         // Prepare first array (f>>2)
         shift_float_num1 = float_num>>2;
@@ -67,8 +69,7 @@ void float2log_LUT(ac_fixed< W, I, true> &float_num){
 
     }
      // Check if the first 3 bits are 011
-    else if ( float_num[I-1] == 0 &&  float_num[I-2] == 1 &&  float_num[I-3] == 1 ) {
-
+    else if ( float_num.slc<4>(W-I-3) == 3 ) {
 
         // Prepare first array (~f>>8)
         comp_float_num1 = float_num>>8;
@@ -79,8 +80,9 @@ void float2log_LUT(ac_fixed< W, I, true> &float_num){
 
     }
      // Check if the first 3 bits are 100
-    else if ( float_num[I-1] == 1 &&  float_num[I-2] == 0 &&  float_num[I-3] == 0 ) {
+    else if ( float_num.slc<4>(W-I-3) == 4 ) {
 
+      std::cout << "here!\n";
         // Prepare first array (f>>4)
         shift_float_num1 = float_num>>4;
 
@@ -97,7 +99,7 @@ void float2log_LUT(ac_fixed< W, I, true> &float_num){
 
     }
     // Check if the first 3 bits are 101
-    else if ( float_num[I-1] == 1 &&  float_num[I-2] == 0 &&  float_num[I-3] == 1 ) {
+    else if ( float_num.slc<4>(W-I-3) == 5 ) {
 
         // Prepare first array (~f>>3)
         comp_float_num1 = float_num>>3;
@@ -112,7 +114,7 @@ void float2log_LUT(ac_fixed< W, I, true> &float_num){
 
     }
     // Check if the first 3 bits are 110
-    else if ( float_num[I-1] == 1 &&  float_num[I-2] == 1 &&  float_num[I-3] == 0 ) {
+    else if ( float_num.slc<4>(W-I-3) == 6 ) {
 
         // Prepare first array (f>>4)
         shift_float_num1 = float_num>>4;
@@ -130,7 +132,7 @@ void float2log_LUT(ac_fixed< W, I, true> &float_num){
 
     }
     // Check if the first 3 bits are 111
-    else if ( float_num[I-1] == 1 &&  float_num[I-2] == 1 &&  float_num[I-3] == 1 ) {
+    else if ( float_num.slc<4>(W-I-3) == 7 ) {
 
         // Prepare first array (~f>>2)
         comp_float_num1 = float_num >> 2;

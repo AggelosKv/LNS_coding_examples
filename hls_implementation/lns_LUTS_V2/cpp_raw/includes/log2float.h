@@ -12,7 +12,7 @@ void log2float_LUT(ac_fixed< W, I, true> &float_num){
 
 
     // Check if the first 3 bits are 000
-    if ( float_num[I-1] == 0 &&  float_num[I-2] == 0 &&  float_num[I-3] == 0 ) {
+    if ( float_num.slc<4>(W-I-3) == 0 ) {
 
         // Prepare first array (~f>>2)
         comp_float_num1 = float_num>>2;
@@ -29,7 +29,7 @@ void log2float_LUT(ac_fixed< W, I, true> &float_num){
     }
 
     // Check if the first 3 bits are 001
-    else if ( float_num[I-1] == 0 &&  float_num[I-2] == 0 &&  float_num[I-3] == 1 ) {
+    else if ( float_num.slc<4>(W-I-3) == 1 ) {
 
         // Prepare first array (f>>5)
         shift_float_num1 = float_num>>5;
@@ -47,7 +47,7 @@ void log2float_LUT(ac_fixed< W, I, true> &float_num){
 
     }
     // Check if the first 3 bits are 010
-    else if ( float_num[I-1] == 0 &&  float_num[I-2] == 1 &&  float_num[I-3] == 0 ) {
+    else if ( float_num.slc<4>(W-I-3) == 2 ) {
 
         // Prepare first array (~f>>3)
         comp_float_num1 = float_num>>3;
@@ -63,7 +63,7 @@ void log2float_LUT(ac_fixed< W, I, true> &float_num){
     }
 
     // Check if the first 3 bits are 011
-    else if ( float_num[I-1] == 0 &&  float_num[I-2] == 1 &&  float_num[I-3] == 1 ) {
+    else if ( float_num.slc<4>(W-I-3) == 3 ) {
 
         // Prepare first array (~f>>4)
         comp_float_num1 = float_num>>4;
@@ -78,7 +78,7 @@ void log2float_LUT(ac_fixed< W, I, true> &float_num){
     }
     
     // Check if the first 3 bits are 011
-    else if ( float_num[I-1] == 1 &&  float_num[I-2] == 0 &&  float_num[I-3] == 0 ) {
+    else if ( float_num.slc<4>(W-I-3) == 4 ) {
 
         // Prepare first array (f>>5)
         shift_float_num1 = float_num>>5;
@@ -92,7 +92,7 @@ void log2float_LUT(ac_fixed< W, I, true> &float_num){
 
     }
     // Check if the first 3 bits are 101
-    else if ( float_num[I-1] == 1 &&  float_num[I-2] == 0 &&  float_num[I-3] == 1 ) {
+    else if ( float_num.slc<4>(W-I-3) == 5 ) {
 
         // Prepare first array (~f>>3)
         comp_float_num1 = float_num>>3;
@@ -107,7 +107,7 @@ void log2float_LUT(ac_fixed< W, I, true> &float_num){
 
     }
     // Check if the first 3 bits are 110
-    else if ( float_num[I-1] == 1 &&  float_num[I-2] == 1 &&  float_num[I-3] == 0 ) {
+    else if ( float_num.slc<4>(W-I-3) == 6 ) {
 
         // Prepare first array (f>>2)
         shift_float_num1 = float_num>>2;
@@ -126,7 +126,7 @@ void log2float_LUT(ac_fixed< W, I, true> &float_num){
     }
     
     // Check if the first 3 bits are 111
-    else if ( float_num[I-1] == 1 &&  float_num[I-2] == 1 &&  float_num[I-3] == 1 ) {
+    else if ( float_num.slc<4>(W-I-3) == 7 ) {
 
         // Here we need only shifts!
 

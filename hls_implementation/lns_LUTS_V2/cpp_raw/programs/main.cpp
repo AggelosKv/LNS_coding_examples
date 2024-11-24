@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
     ac_fixed< W, I, true> num1;
 
 
-    int fin = 10000;
+    int fin = 1000;
 
     for (int i = 0; i<fin; i++){
 
@@ -25,19 +25,20 @@ int main(int argc, char* argv[]) {
     
     num1 = ac_fixed< W, I, true>(random_num);
 
+
     std::cout << "This is the input " << num1<< "\n";
 
     // Convert the float to logarithm
     float2log(num1);
 
-    std::cout << "This the output logarithm" << num1<< "\n";
+    std::cout << "This the output logarithm :" << num1<< "\n";
 
     // Convert the logarithm to  float
     log2float(num1);
 
-    std::cout << "This the final output " << num1<< "\n";
+    std::cout << "This the final output :" << num1<< "\n";
     correct = random_num;
-    std::cout << "This the true output " << correct<< "\n \n";
+    std::cout << "This the true output :" << correct<< "\n \n";
 
     error = (double)abs(0.246*correct);
     correct = correct - num1.to_double();
