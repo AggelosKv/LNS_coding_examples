@@ -54,7 +54,7 @@ void CCS_BLOCK(LUT_log2float)(ac_fixed< W, I, true> &float_num, ac_fixed< W, I, 
 
     }
     // Check if the first 3 bits are 010
-    else if ( ffloat_num.slc<3>(W-I-3) == 2 ) {
+    else if ( float_num.slc<4>(W-I-3) == 2 ) {
 
         // Prepare first array (~f>>3)
         comp_float_num1 = float_num>>3;
