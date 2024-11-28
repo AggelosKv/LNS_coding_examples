@@ -13,7 +13,7 @@
 #define N 20  // Integer bits for ac_fixed
 
 
-float generateRandomFloat(float maxValue = 20000.0) {
+float generateRandomFloat(float maxValue = 200.0) {
     // Seed for the random number generator
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -27,13 +27,13 @@ float generateRandomFloat(float maxValue = 20000.0) {
 
 int main(int argc, char* argv[]) {
 
-    // Create fast_log instances
+    // //Create fast_log instances
     // fast_log<W, I,true> fast_log_num1(0);
     // fast_log<W, I,true> fast_log_num2(0);
     // fast_log<W, I,true> fast_log_ans(0);
     // float float_num;
 
-    // int max_iterations = 1000;
+    // int max_iterations = 10000;
 
     // float num1;
     // float num2;
@@ -46,7 +46,7 @@ int main(int argc, char* argv[]) {
 
     // for (int k = 0; k < max_iterations; k++){
     //     // Generate and print a random floating-point number below 20000
-    // num1 = -generateRandomFloat();
+    // num1 = generateRandomFloat();
     // num2 = generateRandomFloat();
 
      
@@ -82,7 +82,6 @@ int main(int argc, char* argv[]) {
 
 
 
-
 float test_number_a[N];
 float test_number_b[N];
 float test_ans = 0;
@@ -112,8 +111,6 @@ answer.dotProd<N>(array_a,array_b);
     std::cout << "The  result is :" << answer.to_float() << "\n";
 
     std::cout << "The given correct result is :" << test_ans << "\n";
-
-
 
     return(0);
 }
