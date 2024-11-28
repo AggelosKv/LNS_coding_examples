@@ -496,6 +496,25 @@ class fast_log{
 
         }
 
+            fast_log<W, I, T> operator - (const fast_log<W, I, T> &b) {
+            fast_log<W, I, T> ans_num;
+            if (!(sign ^ b.sign) || (b.sign)){
+                ans_num.num = num + b.num;
+                ans_num.sign = sign;
+            }
+            else if (num > b.num){
+                ans_num.num = num - b.num;
+                ans_num.sign = sign;
+            }
+            else{
+                ans_num.num = b.num - num;
+                ans_num.sign = b.sign;
+            }
+             ans_num.num[W-1] = 0;
+            return (ans_num);
+
+        }
+
         fast_log<W, I, T> operator * (const fast_log<W, I, T> &b) {
             fast_log<W, I, T> num1_log;
             fast_log<W, I, T> num2_log;
