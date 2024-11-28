@@ -126,7 +126,7 @@ class fast_log{
          // This function performs the piecewise aproximation to convert the fractional part of a float number to int logarithmic aproximate
         // The input range is only the fraction part 0 <= f < 1 and it is divided in 8 equal spaces
         void LUT_float2log(const ac_fixed<W, I, true> input, ac_fixed<W, I, true> &float_num_out){
-            //std::cout << "The float part first three bit were : " <<float_num[I-1] << float_num[I-2] << float_num[I-3] <<"\n";
+           // std::cout << "The float part first three bit were : " << input.template slc<4>(W-I-3) <<"\n";
 
             ac_fixed<W, I, true> shift_float_num1;
             ac_fixed<W, I, true> comp_float_num1;
@@ -134,143 +134,65 @@ class fast_log{
             ac_fixed<W, I, true> float_num = input;
             // Check if the first 3 bits are 000
             if (  float_num.template slc<4>(W-I-3) == 0 ) {
-
-                // Prepare first array (f>>1)
-                shift_float_num1 = float_num>>1;
-
-                // Prepare second array (~f>>3)
-                comp_float_num1 = float_num>>3;
-                comp_float_num1 = ~comp_float_num1 +  (ac_fixed<W, I, true>(1) >> (W-I)) ;
-
-                // Prepare third array (~f>>7)
-                comp_float_num2 = float_num>>7;
-                comp_float_num2 = ~comp_float_num2 +  (ac_fixed<W, I, true>(1) >> (W-I)) ;
-
-                // Add the products  
-                // Here b is 0 (zero)              
-                float_num = float_num + shift_float_num1 + comp_float_num1 + comp_float_num2;
+      
+                float_num = alpha_log_lut[0] *float_num;
 
             }
             
             // Check if the first 3 bits are 001
             else if (  float_num.template slc<4>(W-I-3) == 1 ) {
 
-                // Prepare first array (f>>1)
-                shift_float_num1 = float_num>>1;
+                float_num = alpha_log_lut[1] *float_num + beta_log_lut[1];
 
-                // Prepare second array (~f>>2)
-                comp_float_num1 = float_num>>2;
-                comp_float_num1 = ~comp_float_num1 +  (ac_fixed<W, I, true>(1) >> (W-I)) ;
-
-                // Prepare third array (~f>>6)
-                comp_float_num2 = float_num>>6;
-                comp_float_num2 = ~comp_float_num2 +  (ac_fixed<W, I, true>(1) >> (W-I)) ;
-
-                // Add the products                
-                float_num = float_num + shift_float_num1 + comp_float_num1 + comp_float_num2 + ac_fixed<W, I, 0>(0.0146484375);
 
             }
             // Check if the first 3 bits are 010
             else if (  float_num.template slc<4>(W-I-3) == 2 ) {
 
-                // Prepare first array (f>>2)
-                shift_float_num1 = float_num>>2;
+                float_num = alpha_log_lut[2] *float_num + beta_log_lut[2];
 
-                // Prepare second array (~f>>3)
-                comp_float_num1 = float_num>>3;
-                comp_float_num1 = ~comp_float_num1 +  (ac_fixed<W, I, true>(1) >> (W-I)) ;
-
-                // Prepare third array (~f>>6)
-                comp_float_num2 = float_num>>6;
-                comp_float_num2 = ~comp_float_num2 +  (ac_fixed<W, I, true>(1) >> (W-I)) ;
-
-                // Add the products                
-                float_num = float_num + shift_float_num1 + comp_float_num1 + comp_float_num2 + ac_fixed<W, I, 0>(0.044921875);
 
             }
             // Check if the first 3 bits are 011
             else if (  float_num.template slc<4>(W-I-3) == 3 ) {
 
+                float_num = alpha_log_lut[3] *float_num + beta_log_lut[3];
 
-                // Prepare first array (~f>>8)
-                comp_float_num1 = float_num>>8;
-                comp_float_num1 = ~comp_float_num1 +  (ac_fixed<W, I, true>(1) >> (W-I)) ;
-
-                // Add the products                
-                float_num = float_num + comp_float_num1 + ac_fixed<W, I, 0>(0.0888671875);
 
             }
             // Check if the first 3 bits are 100
             else if (  float_num.template slc<4>(W-I-3) == 4 ) {
 
-                // Prepare first array (f>>4)
-                shift_float_num1 = float_num>>4;
+                float_num = alpha_log_lut[4] *float_num + beta_log_lut[4];
 
-                // Prepare second array (~f>>3)
-                comp_float_num1 = float_num>>3;
-                comp_float_num1 = ~comp_float_num1 +  (ac_fixed<W, I, true>(1) >> (W-I)) ;
-
-                // Prepare third array (~f>>7)
-                comp_float_num2 = float_num>>7;
-                comp_float_num2 = ~comp_float_num2 +  (ac_fixed<W, I, true>(1) >> (W-I)) ;
-
-                // Add the products                
-                float_num = float_num + shift_float_num1 + comp_float_num1 + comp_float_num2 + ac_fixed<W, I, 0>(0.1201171875);
 
             }
             // Check if the first 3 bits are 101
             else if (  float_num.template slc<4>(W-I-3) == 5 ) {
 
-                // Prepare first array (~f>>3)
-                comp_float_num1 = float_num>>3;
-                comp_float_num1 = ~comp_float_num1 +  (ac_fixed<W, I, true>(1) >> (W-I)) ;
+                float_num = alpha_log_lut[5] *float_num + beta_log_lut[5];
 
-                // Prepare second array (~f>>6)
-                comp_float_num2 = float_num>>6;
-                comp_float_num2 = ~comp_float_num2 +  (ac_fixed<W, I, true>(1) >> (W-I)) ;
-
-                // Add the products                
-                float_num = float_num + comp_float_num1 + comp_float_num2 + ac_fixed<W, I, 0>(0.1630859375);
 
             }
             // Check if the first 3 bits are 110
             else if (  float_num.template slc<4>(W-I-3) == 6 ) {
 
-                // Prepare first array (f>>4)
-                shift_float_num1 = float_num>>4;
+                float_num = alpha_log_lut[6] *float_num + beta_log_lut[6];
 
-                // Prepare second array (~f>>2)
-                comp_float_num1 = float_num>>2;
-                comp_float_num1 = ~comp_float_num1 +  (ac_fixed<W, I, true>(1) >> (W-I)) ;
-
-                // Prepare third array (~f>>6)
-                comp_float_num2 = float_num>>6;
-                comp_float_num2 = ~comp_float_num2 +  (ac_fixed<W, I, true>(1) >> (W-I)) ;
-
-                // Add the products                
-                float_num = float_num + shift_float_num1 + comp_float_num1 + comp_float_num2 + ac_fixed<W, I, 0>(0.2099609375);
 
             }
             // Check if the first 3 bits are 111
             else if (  float_num.template slc<4>(W-I-3) == 7 ) {
 
-                // Prepare first array (~f>>2)
-                comp_float_num1 = float_num >> 2;
-                comp_float_num1 = ~comp_float_num1+ (ac_fixed<W, I, true>(1) >> (W-I)) ;
+                float_num = alpha_log_lut[7] *float_num + beta_log_lut[7];
 
-                // Prepare second array (~f>>7)
-                comp_float_num2 = float_num>>7;
-                comp_float_num2 = ~comp_float_num2 + (ac_fixed<W, I, true>(1) >> (W-I)) ;
-
-                // Add the products                
-                float_num = float_num + comp_float_num1 + comp_float_num2 + ac_fixed<W, I, true>(0.2578125);
             }
+            //std::cout << "The float num after the LUT is : " << float_num <<"\n";
             float_num_out = float_num;
         }
 
         // We call this function to make the conversion from a logarithm to a float number
         void log2float(const fast_log<W, I, T> input, fast_log<W, I, T> &float_num_out ){
-
             int integer;
             ac_int< W - I, true> temp;
             ac_fixed<W, I, true> float_num_temp_out;
@@ -286,21 +208,26 @@ class fast_log{
             // run the LUT
             //std::cout << "Before LUT " << float_num << "\n";
             // Run the peicewice approximation ( The integer part must me missing)
+            //std::cout << "before LUT " << float_num << "\n";
+
             LUT_log2float(float_num, float_num_temp_out);
+            //std::cout << "after LUT " << float_num_temp_out << "\n";
             //std::cout << "after LUT " << float_num << "\n";
 
             // Shift the binary num Left integer times
             float_num_temp_out <<= integer;
+
+  
             
             float_num_out.num = float_num_temp_out;
-            
+
         }
 
         // This function performs the piecewise aproximation to convert the fractional part of a logarithm to its float aproximate
         // The input range is only the fraction part 0 <= f < 1 and it is divided in 8 equal spaces
         void LUT_log2float(const ac_fixed<W, I, true> input, ac_fixed<W, I, true> &float_num_out){
 
-            //std::cout << "The float part first three bit were : " <<float_num[I-1] << float_num[I-2] << float_num[I-3] <<"\n";
+           // std::cout << "The float part first three bit were : " << input.template slc<4>(W-I-3) <<"\n";
 
             ac_fixed<W, I, true> shift_float_num1;
             ac_fixed<W, I, true> comp_float_num1;
@@ -311,134 +238,54 @@ class fast_log{
             // Check if the first 3 bits are 000
             if (  float_num.template slc<4>(W-I-3) == 0 ) {
 
-                // Prepare first array (~f>>2)
-                comp_float_num1 = float_num>>2;
-                comp_float_num1 = ~comp_float_num1 +  (ac_fixed<W, I, true>(1) >> (W-I)) ;
-
-                // Prepare second array (~f>>5)
-                comp_float_num2 = float_num>>5;
-                comp_float_num2 = ~comp_float_num2 +  (ac_fixed<W, I, true>(1) >> (W-I)) ;
-
-                // Add the products  
-                // Here b is 0 (zero)              
-                float_num_out = float_num + comp_float_num1 + comp_float_num2 + ac_fixed<W, I, 0>(1);
+                float_num_out = alpha_antilog_lut[0] *float_num + beta_antilog_lut[0];
 
             }
 
             // Check if the first 3 bits are 001
             else if (  float_num.template slc<4>(W-I-3) == 1 ) {
 
-                // Prepare first array (f>>5)
-                shift_float_num1 = float_num>>5;
-
-                // Prepare second array (~f>>2)
-                comp_float_num1 = float_num>>2;
-                comp_float_num1 = ~comp_float_num1 +  (ac_fixed<W, I, true>(1) >> (W-I)) ;
-
-                // Prepare third array (~f>>7)
-                comp_float_num2 = float_num>>7;
-                comp_float_num2 = ~comp_float_num2 +  (ac_fixed<W, I, true>(1) >> (W-I)) ;
-
-                // Add the products                
-                float_num_out = float_num + shift_float_num1 + comp_float_num1 + comp_float_num2 + ac_fixed<W, I, 0>(0.9912109375);
+                float_num_out = alpha_antilog_lut[1] *float_num + beta_antilog_lut[1];
 
             }
             // Check if the first 3 bits are 010
             else if ( float_num.template slc<3>(W-I-3) == 2 ) {
 
-                // Prepare first array (~f>>3)
-                comp_float_num1 = float_num>>3;
-                comp_float_num1 = ~comp_float_num1 +  (ac_fixed<W, I, true>(1) >> (W-I)) ;
-
-                // Prepare secont array (~f>>7)
-                comp_float_num2 = float_num>>7;
-                comp_float_num2 = ~comp_float_num2 +  (ac_fixed<W, I, true>(1) >> (W-I)) ;
-
-                // Add the products                
-                float_num_out = float_num + comp_float_num1 + comp_float_num2 + ac_fixed<W, I, 0>(0.9716796875);
+                float_num_out = alpha_antilog_lut[2] *float_num + beta_antilog_lut[2];
 
             }
 
             // Check if the first 3 bits are 011
             else if (  float_num.template slc<4>(W-I-3) == 3 ) {
 
-                // Prepare first array (~f>>4)
-                comp_float_num1 = float_num>>4;
-                comp_float_num1 = ~comp_float_num1 +  (ac_fixed<W, I, true>(1) >> (W-I)) ;
-
-                // Prepare secont array (f>>7)
-                shift_float_num1 = float_num>>7;
-
-                // Add the products                
-                float_num_out = float_num + shift_float_num1 + comp_float_num1 + ac_fixed<W, I, 0>(0.94140625);
+                float_num_out = alpha_antilog_lut[3] *float_num + beta_antilog_lut[3];
 
             }
             
             // Check if the first 3 bits are 011
             else if (  float_num.template slc<4>(W-I-3) == 4 ) {
 
-                // Prepare first array (f>>5)
-                shift_float_num1 = float_num>>5;
-
-                // Prepare second array (~f>>7)
-                comp_float_num1 = float_num>>7;
-                comp_float_num1 = ~comp_float_num1 +  (ac_fixed<W, I, true>(1) >> (W-I)) ;
-
-                // Add the products                
-                float_num_out = float_num + shift_float_num1 + comp_float_num1  + ac_fixed<W, I, 0>(0.90234375);
+                float_num_out = alpha_antilog_lut[4] *float_num + beta_antilog_lut[4];
 
             }
             // Check if the first 3 bits are 101
             else if (  float_num.template slc<4>(W-I-3) == 5 ) {
 
-                // Prepare first array (~f>>3)
-                comp_float_num1 = float_num>>3;
-                comp_float_num1 = ~comp_float_num1 +  (ac_fixed<W, I, true>(1) >> (W-I)) ;
-
-                // Prepare second array (~f>>7)
-                comp_float_num2 = float_num>>7;
-                comp_float_num2 = ~comp_float_num2 +  (ac_fixed<W, I, true>(1) >> (W-I)) ;
-
-                // Add the products                
-                float_num_out = float_num + comp_float_num1 + comp_float_num2 + ac_fixed<W, I, 0>(0.84375);
+                float_num_out = alpha_antilog_lut[5] *float_num + beta_antilog_lut[5];
 
             }
             // Check if the first 3 bits are 110
             else if (  float_num.template slc<4>(W-I-3) == 6 ) {
 
-                // Prepare first array (f>>2)
-                shift_float_num1 = float_num>>2;
-
-                // Prepare second array (~f>>5)
-                comp_float_num1 = float_num>>5;
-                comp_float_num1 = ~comp_float_num1 +  (ac_fixed<W, I, true>(1) >> (W-I)) ;
-
-                // Prepare third array (~f>>7)
-                comp_float_num2 = float_num>>7;
-                comp_float_num2 = ~comp_float_num2 +  (ac_fixed<W, I, true>(1) >> (W-I)) ;
-
-                // Add the products                
-                float_num_out = float_num + shift_float_num1 + comp_float_num1 + comp_float_num2 + ac_fixed<W, I, 0>(0.7734375);
+                float_num_out = alpha_antilog_lut[6] *float_num + beta_antilog_lut[6];
 
             }
             
             // Check if the first 3 bits are 111
             else if (  float_num.template slc<4>(W-I-3) == 7 ) {
 
-                // Here we need only shifts!
+                float_num_out = alpha_antilog_lut[7] *float_num + beta_antilog_lut[7];
 
-                // Prepare first array (~f>>2)
-                shift_float_num1 = float_num >> 2;
-
-                // Prepare second array (~f>>4)
-                comp_float_num1 = float_num>>4;
-
-                // Prepare third array (~f>>7)
-                comp_float_num2 = float_num>>7;
-
-
-                // Add the products                
-                float_num_out = float_num  + shift_float_num1 + comp_float_num1 + comp_float_num2 + ac_fixed<W, I, true>(0.6787109375);
             }
             
         }
@@ -605,6 +452,55 @@ class fast_log{
             num = sum.num;
             sign = sum.sign;
         }
+
+    const ac_fixed<W-I+1, 1, 0>
+    alpha_log_lut[8] = {
+        175.0f/128.0f,
+        155.0f/128.0f,
+        142.0f/128.0f,
+        129.0f/128.0f,
+        119.0f/128.0f,
+        110.0f/128.0f,
+        102.0f/128.0f,
+        95.0f/128.0f
+    };
+
+    const ac_fixed<W-I+1, 1, 0> 
+    beta_log_lut[8] = {
+        0.0f,
+        20.0f/1024.0f,
+        46.0f/1024.0f,
+        84.0f/1024.0f,
+        123.0f/1024.0f,
+        167.0f/1024.0f,
+        215.0f/1024.0f,
+        264.0f/1024.0f
+    };
+
+    const ac_fixed<W-I+1, 1, 0>
+    alpha_antilog_lut[8] = {
+        92.0f/128.0f,
+        93.0f/128.0f,
+        111.0f/128.0f,
+        121.0f/128.0f,
+        132.0f/128.0f,
+        143.0f/128.0f,
+        155.0f/128.0f,
+        169.0f/128.0f
+    };
+
+    const ac_fixed<W-I+1, 1, 0> 
+    beta_antilog_lut[8] = {
+        1024.0f/1024.0f,
+        1015.0f/1024.0f,
+        995.0f/1024.0f,
+        964.0f/1024.0f,
+        924.0f/1024.0f,
+        864.0f/1024.0f,
+        792.0f/1024.0f,
+        295.0f/1024.0f
+    };
+
 
 };
 
