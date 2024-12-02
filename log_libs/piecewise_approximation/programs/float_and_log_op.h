@@ -444,7 +444,7 @@ class fast_log{
         }
 
         void operator = (const float &in) {
-            num = (ac_fixed<W,I,T>)(abs(in));   // The number must be positive
+            num = (ac_fixed<W,I,T>)(in>0? in : -in);   // The number must be positive
             sign = in>=0? 0 : 1;
         }
 
@@ -549,6 +549,11 @@ class fast_log{
 
         fast_log<W, I, T> &operator *= (const fast_log<W, I, T> &b) {
             *this = this->operator*(b);
+            return *this;
+        }
+
+        fast_log<W, I, T> &operator += (const  fast_log<W, I, T> &b) {
+            *this = this->operator+(b);
             return *this;
         }
 

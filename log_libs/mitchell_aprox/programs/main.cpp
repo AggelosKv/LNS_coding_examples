@@ -19,7 +19,7 @@ float generateRandomFloat(float maxValue = 200.0) {
     std::mt19937 gen(rd());
     
     // Define the range for floating-point numbers
-    std::uniform_real_distribution<float> dist(1, maxValue);
+    std::uniform_real_distribution<float> dist(-maxValue,-1);
     
     return dist(gen);
 }
@@ -46,11 +46,11 @@ int main(int argc, char* argv[]) {
 
     for (int k = 0; k < max_iterations; k++){
         // Generate and print a random floating-point number below 20000
-    num1 = generateRandomFloat();
+    num1 = -generateRandomFloat();
     num2 = generateRandomFloat();
 
      
-    correct = num1 / num2;
+    correct = num1 * num2;
     error = 0.246*correct;
 
     std::cout << "Random floating-point number num1: " << num1 << std::endl;
@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
     fast_log_num1 = num1;
     fast_log_num2 = num2;
 
-    fast_log_ans = fast_log_num1 / fast_log_num2;
+    fast_log_ans = fast_log_num1 * fast_log_num2;
 
 
     std::cout << "The correct result is :" << correct << "\n";
@@ -94,7 +94,7 @@ int main(int argc, char* argv[]) {
 // for (int i = 0; i < N; i++ ){
 //     test_number_a[i] = generateRandomFloat();
 //     std::cout << "The  test_number_a is :" <<  test_number_a[i] << "\n";
-//     test_number_b[i] = generateRandomFloat();
+//     test_number_b[i] = -generateRandomFloat();
 //     std::cout << "The  test_number_b is :" <<  test_number_b[i] << "\n";
 //     test_ans = test_ans + test_number_a[i] * test_number_b[i];
 

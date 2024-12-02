@@ -137,7 +137,7 @@ class fast_log{
         }
 
         void operator = (const float &in) {
-            num = (ac_fixed<W,I,T>)(abs(in));   // The number must be positive
+            num = (ac_fixed<W,I,T>)(in>0? in : -in);   // The number must be positive
             sign = in>=0? 0 : 1;
         }
 
@@ -248,6 +248,11 @@ class fast_log{
             return *this;
         }
 
+        fast_log<W, I, T> &operator += (const  fast_log<W, I, T> &b) {
+            *this = this->operator+(b);
+            return *this;
+        }
+
         bool operator == (const fast_log<W, I, T> b) {
             return ((num == b.num) && (sign == b.sign));
         }
@@ -320,55 +325,6 @@ class fast_log{
             num = sum.num;
             sign = sum.sign;
         }
-
-    const ac_fixed<W-I+1, 1, 0>
-    alpha_log_lut[8] = {
-        175.0f/128.0f,
-        155.0f/128.0f,
-        142.0f/128.0f,
-        129.0f/128.0f,
-        119.0f/128.0f,
-        110.0f/128.0f,
-        102.0f/128.0f,
-        95.0f/128.0f
-    };
-
-    const ac_fixed<W-I+1, 1, 0> 
-    beta_log_lut[8] = {
-        0.0f,
-        20.0f/1024.0f,
-        46.0f/1024.0f,
-        84.0f/1024.0f,
-        123.0f/1024.0f,
-        167.0f/1024.0f,
-        215.0f/1024.0f,
-        264.0f/1024.0f
-    };
-
-    const ac_fixed<W-I+1, 1, 0>
-    alpha_antilog_lut[8] = {
-        92.0f/128.0f,
-        93.0f/128.0f,
-        111.0f/128.0f,
-        121.0f/128.0f,
-        132.0f/128.0f,
-        143.0f/128.0f,
-        155.0f/128.0f,
-        169.0f/128.0f
-    };
-
-    const ac_fixed<W-I+1, 1, 0> 
-    beta_antilog_lut[8] = {
-        1024.0f/1024.0f,
-        1015.0f/1024.0f,
-        995.0f/1024.0f,
-        964.0f/1024.0f,
-        924.0f/1024.0f,
-        864.0f/1024.0f,
-        792.0f/1024.0f,
-        295.0f/1024.0f
-    };
-
 
 };
 

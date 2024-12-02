@@ -145,7 +145,7 @@ class iter_mul_num{
         
 
         void operator = (const float &in) {
-            num = (ac_int<W,false>)(abs(in));   // The number must be positive
+            num = (ac_int<W,false>)((in>0? in : -in));   // The number must be positive
             sign = in>=0? 0 : 1;
         }
 
@@ -219,6 +219,10 @@ class iter_mul_num{
             return *this;
         }
 
+        iter_mul_num<W, T> &operator += (const  iter_mul_num<W, T> &b) {
+            *this = this->operator+(b);
+            return *this;
+        }
 
         bool operator == (const iter_mul_num<W, T> b) {
             return ((num == b.num) && (sign == b.sign));
