@@ -11,11 +11,9 @@ template<int W,int E>
 class fast_log{
     public:
 
-        typedef ac_std_float<W,E> num_t;
+        ac_std_float<W,E>  num;
         
-        num_t  num;
-        
-        const ac_int<W,false> e_bias = num_t(1).data_ac_int();    // exponent bias shifted by W-E bits
+        const ac_int<W,false> e_bias = ac_std_float<W,E>(1).data_ac_int();    // exponent bias shifted by W-E bits
 
         const ac_int<W,false> c_mul = ((ac_fixed<W,E>(0.0545458)).template slc<W>(0)) - e_bias;
 
@@ -51,7 +49,7 @@ class fast_log{
         // De-constactor
         ~fast_log() {};
 
-        void set(num_t num_s) {
+        void set(ac_std_float<W,E> num_s) {
             num = num_s;
         }
 
@@ -152,21 +150,6 @@ class fast_log{
         }
 
 
-        template<int N>
-        void dotProd(fast_log<W, E> A[N],fast_log<W, E> B[N]) {
-
-            fast_log<W, E> sum_array[N];
-            fast_log<W, E> sum =  fast_log<W, E>(0) ;
-
-            for (int i=0; i<N; i++){
-                sum_array[i] = A[i] * B[i];
-            }
-            for(int i=0; i<N; i++){
-                sum =  sum_array[i] + sum;
-            }
-
-            num = sum.num;
-        }
 
 
 
@@ -272,6 +255,26 @@ class fast_log{
             return ((sign_a > sign_b ) || ((sign_a == sign_b) && (less_eq)));
         }
         
+        template<int N>
+        void dotProd(fast_log<W, E> A[N],fast_log<W, E> B[N]) {
+
+            fast_log<W, E> sum =  fast_log<W, E>(0) ;
+
+            for (int i=0; i<N; i++){
+                sum += A[i] * B[i];
+            }
+
+            num = sum.num;
+        }
+
+        void mac(fast_log<W, E> A,fast_log<W, E> B,fast_log<W, E> C) {
+
+            fast_log<W, E> sum =  fast_log<W, E>(0) ;
+
+                sum = A * B + C;
+
+            num = sum.num;
+        }
 
 };
 

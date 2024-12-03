@@ -84,28 +84,44 @@ int main(int argc, char* argv[]) {
 
 float test_number_a[N];
 float test_number_b[N];
+float test_number_c[N];
+
 float test_ans = 0;
 
 
  fast_log<W, I,true> array_a[N];
  fast_log<W, I,true> array_b[N];
+ fast_log<W, I,true> array_c[N];
+
  fast_log<W, I,true> answer = fast_log<W, I,true>(0);
 
-for (int i = 0; i < N; i++ ){
+// for (int i = 0; i < N; i++ ){
+//     test_number_a[i] = generateRandomFloat();
+//     std::cout << "The  test_number_a is :" <<  test_number_a[i] << "\n";
+//     test_number_b[i] = generateRandomFloat();
+//     std::cout << "The  test_number_b is :" <<  test_number_b[i] << "\n";
+//     test_ans = test_ans + test_number_a[i] * test_number_b[i];
+
+//     array_a[i] =  fast_log<W, I,true>(test_number_a[i]);
+//     array_b[i] =  fast_log<W, I,true>(test_number_b[i]);
+
+// }
+    int i = 0;
     test_number_a[i] = generateRandomFloat();
     std::cout << "The  test_number_a is :" <<  test_number_a[i] << "\n";
     test_number_b[i] = generateRandomFloat();
     std::cout << "The  test_number_b is :" <<  test_number_b[i] << "\n";
-    test_ans = test_ans + test_number_a[i] * test_number_b[i];
+     test_number_c[i] = generateRandomFloat();
+        std::cout << "The  test_number_c is :" <<  test_number_c[i] << "\n";
+    test_ans = test_number_c[i] + test_number_a[i] * test_number_b[i];
 
     array_a[i] =  fast_log<W, I,true>(test_number_a[i]);
     array_b[i] =  fast_log<W, I,true>(test_number_b[i]);
-
-}
-
+    array_c[i] =  fast_log<W, I,true>(test_number_c[i]);
 
 
-answer.dotProd<N>(array_a,array_b);
+
+answer.mac(array_a[i],array_b[i],array_c[i]);
 
 //answer = array_a[0] + array_b[0];
     std::cout << "The  result is :" << answer.to_float() << "\n";
