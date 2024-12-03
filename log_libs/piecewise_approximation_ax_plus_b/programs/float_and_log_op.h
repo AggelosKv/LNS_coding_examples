@@ -8,11 +8,8 @@ template<int W,int I,bool T>
 class fast_log{
     public:
 
-        typedef ac_fixed<W,I,T> num_t;
-        typedef ac_int<1,false> sign_t;
-
-        num_t  num;
-        sign_t sign;    // 1'b0 positive, 1'b1 negative
+        ac_fixed<W,I,T>  num;
+        ac_int<1,false> sign;    // 1'b0 positive, 1'b1 negative
 
         // Constructors
         fast_log() {};
@@ -33,7 +30,7 @@ class fast_log{
         // De-constactor
         ~fast_log() {};
 
-        void set(sign_t sign_s, num_t num_s) {
+        void set(ac_int<1,false> sign_s, ac_fixed<W,I,T> num_s) {
             sign = sign_s;
             num = num_s;
         }
@@ -291,7 +288,7 @@ class fast_log{
         }
 
         void operator = (const float &in) {
-            num = (ac_fixed<W,I,T>)(abs(in));   // The number must be positive
+            num = (ac_fixed<W,I,T>)(in>0? in : -in);   // The number must be positive
             sign = in>=0? 0 : 1;
         }
 
@@ -399,6 +396,11 @@ class fast_log{
             return *this;
         }
 
+        fast_log<W, I, T> &operator += (const  fast_log<W, I, T> &b) {
+            *this = this->operator+(b);
+            return *this;
+        }
+
         bool operator == (const fast_log<W, I, T> b) {
             return ((num == b.num) && (sign == b.sign));
         }
@@ -458,18 +460,23 @@ class fast_log{
         template<int N>
         void dotProd(fast_log<W, I, T> A[N],fast_log<W, I, T> B[N]) {
 
-            fast_log<W, I, T> sum_array[N];
             fast_log<W, I, T> sum =  fast_log<W, I, T>(0) ;
 
             for (int i=0; i<N; i++){
-                sum_array[i] = A[i] * B[i];
-            }
-            for(int i=0; i<N; i++){
-                sum =  sum_array[i] + sum;
+                sum += A[i] * B[i];
             }
 
             num = sum.num;
             sign = sum.sign;
+        }
+
+        void mac(fast_log<W, I, T> A,fast_log<W, I, T> B,fast_log<W, I, T> C) {
+
+            fast_log<W, I, T> sum =  fast_log<W, I, T>(0) ;
+
+                sum = A * B + C;
+
+            num = sum.num;
         }
 
     const ac_fixed<W-I+1, 1, 0>

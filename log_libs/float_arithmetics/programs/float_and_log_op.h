@@ -11,25 +11,23 @@ template<int W,int E>
 class fast_log{
     public:
 
-        typedef ac_std_float<W,E> num_t;
+        ac_std_float<W,E>  num;
         
-        num_t  num;
-        
-        const ac_int<W,false> e_bias = num_t(1).data_ac_int();    // exponent bias shifted by W-E bits
+        const ac_int<W,false> e_bias = ac_std_float<W,E>(1).data_ac_int();    // exponent bias shifted by W-E bits
 
-        ac_int<W,false> c_mul = ((ac_fixed<W,E>(0.0545458)).template slc<W>(0)) - e_bias;
+        const ac_int<W,false> c_mul = ((ac_fixed<W,E>(0.0545458)).template slc<W>(0)) - e_bias;
 
-        ac_int<W,false> c_div = ((ac_fixed<W,E>(-0.0593111)).template slc<W>(0)) + e_bias;
+        const ac_int<W,false> c_div = ((ac_fixed<W,E>(-0.0593111)).template slc<W>(0)) + e_bias;
 
-        ac_int<W,false> c_sq = ((ac_fixed<W,E>(0.05409255339)).template slc<W>(0)) - e_bias;    // Cc-B
+        const ac_int<W,false> c_sq = ((ac_fixed<W,E>(0.05409255339)).template slc<W>(0)) - e_bias;    // Cc-B
 
-        ac_int<W,false> c_inv = ((ac_fixed<W,E>(-0.1171358)).template slc<W>(0)) + (e_bias<<1);  // Cc + 2*B
+        const ac_int<W,false> c_inv = ((ac_fixed<W,E>(-0.1171358)).template slc<W>(0)) + (e_bias<<1);  // Cc + 2*B
 
-        ac_int<W,false> c_sqrt = ((ac_fixed<W,E>(-0.05581516662433070558320861061912)).template slc<W>(0)) + e_bias;   // 2*Cc+ B
+        const ac_int<W,false> c_sqrt = ((ac_fixed<W,E>(-0.05581516662433070558320861061912)).template slc<W>(0)) + e_bias;   // 2*Cc+ B
 
-        ac_int<W+1,false> c_inv_sqrt = ((ac_fixed<W,E>(-0.1715728752538099023966225515806)).template slc<W>(0)) + (e_bias<<1) + e_bias;  // 2*Cc + 3*B
+        const ac_int<W+1,false> c_inv_sqrt = ((ac_fixed<W,E>(-0.1715728752538099023966225515806)).template slc<W>(0)) + (e_bias<<1) + e_bias;  // 2*Cc + 3*B
 
-        ac_int<W,false> c_div_by_sqrt = ((ac_fixed<W,E>(-0.059443)).template slc<W>(0)) + e_bias;     // B + 2*Cc
+        const ac_int<W,false> c_div_by_sqrt = ((ac_fixed<W,E>(-0.059443)).template slc<W>(0)) + e_bias;     // B + 2*Cc
 
 
         // Constructors
@@ -51,7 +49,7 @@ class fast_log{
         // De-constactor
         ~fast_log() {};
 
-        void set(num_t num_s) {
+        void set(ac_std_float<W,E> num_s) {
             num = num_s;
         }
 
@@ -152,26 +150,16 @@ class fast_log{
         }
 
 
-        template<int N>
-        void dotProd(fast_log<W, E> A[N],fast_log<W, E> B[N]) {
-
-            fast_log<W, E> sum_array[N];
-            fast_log<W, E> sum =  fast_log<W, E>(0) ;
-
-            for (int i=0; i<N; i++){
-                sum_array[i] = A[i] * B[i];
-            }
-            for(int i=0; i<N; i++){
-                sum =  sum_array[i] + sum;
-            }
-
-            num = sum.num;
-        }
 
 
 
         fast_log<W, E> &operator *= (const fast_log<W, E> &b) {
             *this = this->operator*(b);
+            return *this;
+        }
+
+        fast_log<W, E> &operator += (const fast_log<W, E> &b) {
+            *this = this->operator+(b);
             return *this;
         }
 
@@ -185,8 +173,8 @@ class fast_log{
 
         bool operator >  (const fast_log<W, E> b) {
 
-            ac_int<W,false> num_a = num.to_ac_int();
-            ac_int<W,false> num_b = b.num.to_ac_int();
+            ac_int<W,false> num_a = num.data_ac_int();
+            ac_int<W,false> num_b = b.num.data_ac_int();
 
             ac_int<1,false> sign_a = num_a[W-1];
             ac_int<1,false> sign_b = num_b[W-1];
@@ -207,8 +195,8 @@ class fast_log{
 
         bool operator <  (const fast_log<W, E> b) {
 
-            ac_int<W,false> num_a = num.to_ac_int();
-            ac_int<W,false> num_b = b.num.to_ac_int();
+            ac_int<W,false> num_a = num.data_ac_int();
+            ac_int<W,false> num_b = b.num.data_ac_int();
 
             ac_int<1,false> sign_a = num_a[W-1];
             ac_int<1,false> sign_b = num_b[W-1];
@@ -227,8 +215,8 @@ class fast_log{
         }
 
         bool operator >= (const fast_log<W, E> b) {
-            ac_int<W,false> num_a = num.to_ac_int();
-            ac_int<W,false> num_b = b.num.to_ac_int();
+            ac_int<W,false> num_a = num.data_ac_int();
+            ac_int<W,false> num_b = b.num.data_ac_int();
 
             ac_int<1,false> sign_a = num_a[W-1];
             ac_int<1,false> sign_b = num_b[W-1];
@@ -248,8 +236,8 @@ class fast_log{
 
         bool operator <= (const fast_log<W, E> b) {
 
-            ac_int<W,false> num_a = num.to_ac_int();
-            ac_int<W,false> num_b = b.num.to_ac_int();
+            ac_int<W,false> num_a = num.data_ac_int();
+            ac_int<W,false> num_b = b.num.data_ac_int();
 
             ac_int<1,false> sign_a = num_a[W-1];
             ac_int<1,false> sign_b = num_b[W-1];
@@ -267,6 +255,26 @@ class fast_log{
             return ((sign_a > sign_b ) || ((sign_a == sign_b) && (less_eq)));
         }
         
+        template<int N>
+        void dotProd(fast_log<W, E> A[N],fast_log<W, E> B[N]) {
+
+            fast_log<W, E> sum =  fast_log<W, E>(0) ;
+
+            for (int i=0; i<N; i++){
+                sum += A[i] * B[i];
+            }
+
+            num = sum.num;
+        }
+
+        void mac(fast_log<W, E> A,fast_log<W, E> B,fast_log<W, E> C) {
+
+            fast_log<W, E> sum =  fast_log<W, E>(0) ;
+
+                sum = A * B + C;
+
+            num = sum.num;
+        }
 
 };
 

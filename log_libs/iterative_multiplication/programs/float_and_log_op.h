@@ -8,11 +8,8 @@ template<int W,bool T>
 class iter_mul_num{
     public:
 
-        typedef ac_int<W,false> num_t;
-        typedef ac_int<1,false> sign_t;
-
-        num_t  num;
-        sign_t sign;    // 1'b0 positive, 1'b1 negative
+        ac_int<W,false>  num;
+        ac_int<1,false> sign;    // 1'b0 positive, 1'b1 negative
 
         // Constructors
         iter_mul_num() {};
@@ -33,7 +30,7 @@ class iter_mul_num{
         // De-constactor
         ~iter_mul_num() {};
 
-        void set(sign_t sign_s, num_t num_s) {
+        void set(ac_int<1,false> sign_s, ac_int<W,false> num_s) {
             sign = sign_s;
             num = num_s;
         }
@@ -145,7 +142,7 @@ class iter_mul_num{
         
 
         void operator = (const float &in) {
-            num = (ac_int<W,false>)(abs(in));   // The number must be positive
+            num = (ac_int<W,false>)((in>0? in : -in));   // The number must be positive
             sign = in>=0? 0 : 1;
         }
 
@@ -219,6 +216,10 @@ class iter_mul_num{
             return *this;
         }
 
+        iter_mul_num<W, T> &operator += (const  iter_mul_num<W, T> &b) {
+            *this = this->operator+(b);
+            return *this;
+        }
 
         bool operator == (const iter_mul_num<W, T> b) {
             return ((num == b.num) && (sign == b.sign));
@@ -280,20 +281,24 @@ class iter_mul_num{
         template<int N>
         void dotProd(iter_mul_num<W, T> A[N],iter_mul_num<W, T> B[N]) {
 
-            iter_mul_num<W, T> sum_array[N];
             iter_mul_num<W, T> sum =  iter_mul_num<W, T>(0) ;
 
             for (int i=0; i<N; i++){
-                sum_array[i] = A[i] * B[i];
-            }
-            for(int i=0; i<N; i++){
-                sum =  sum_array[i] + sum;
+                sum += A[i] * B[i];
             }
 
             num = sum.num;
             sign = sum.sign;
         }
-        
+
+        void mac(iter_mul_num<W, T> A,iter_mul_num<W, T> B,iter_mul_num<W, T> C) {
+
+            iter_mul_num<W, T> sum =  iter_mul_num<W, T>(0) ;
+
+                sum = A * B + C;
+
+            num = sum.num;
+        }
 
 };
 

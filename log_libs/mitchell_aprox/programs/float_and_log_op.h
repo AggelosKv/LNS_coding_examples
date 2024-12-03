@@ -8,11 +8,8 @@ template<int W,int I,bool T>
 class fast_log{
     public:
 
-        typedef ac_fixed<W,I,T> num_t;
-        typedef ac_int<1,false> sign_t;
-
-        num_t  num;
-        sign_t sign;    // 1'b0 positive, 1'b1 negative
+        ac_fixed<W,I,T>  num;
+        ac_int<1,false> sign;    // 1'b0 positive, 1'b1 negative
 
         // Constructors
         fast_log() {};
@@ -33,7 +30,7 @@ class fast_log{
         // De-constactor
         ~fast_log() {};
 
-        void set(sign_t sign_s, num_t num_s) {
+        void set(ac_int<1,false> sign_s, ac_fixed<W,I,T> num_s) {
             sign = sign_s;
             num = num_s;
         }
@@ -137,7 +134,7 @@ class fast_log{
         }
 
         void operator = (const float &in) {
-            num = (ac_fixed<W,I,T>)(abs(in));   // The number must be positive
+            num = (ac_fixed<W,I,T>)(in>0? in : -in);   // The number must be positive
             sign = in>=0? 0 : 1;
         }
 
@@ -248,6 +245,11 @@ class fast_log{
             return *this;
         }
 
+        fast_log<W, I, T> &operator += (const  fast_log<W, I, T> &b) {
+            *this = this->operator+(b);
+            return *this;
+        }
+
         bool operator == (const fast_log<W, I, T> b) {
             return ((num == b.num) && (sign == b.sign));
         }
@@ -307,69 +309,24 @@ class fast_log{
         template<int N>
         void dotProd(fast_log<W, I, T> A[N],fast_log<W, I, T> B[N]) {
 
-            fast_log<W, I, T> sum_array[N];
             fast_log<W, I, T> sum =  fast_log<W, I, T>(0) ;
 
             for (int i=0; i<N; i++){
-                sum_array[i] = A[i] * B[i];
-            }
-            for(int i=0; i<N; i++){
-                sum =  sum_array[i] + sum;
+                sum += A[i] * B[i];
             }
 
             num = sum.num;
             sign = sum.sign;
         }
 
-    const ac_fixed<W-I+1, 1, 0>
-    alpha_log_lut[8] = {
-        175.0f/128.0f,
-        155.0f/128.0f,
-        142.0f/128.0f,
-        129.0f/128.0f,
-        119.0f/128.0f,
-        110.0f/128.0f,
-        102.0f/128.0f,
-        95.0f/128.0f
-    };
+        void mac(fast_log<W, I, T> A,fast_log<W, I, T> B,fast_log<W, I, T> C) {
 
-    const ac_fixed<W-I+1, 1, 0> 
-    beta_log_lut[8] = {
-        0.0f,
-        20.0f/1024.0f,
-        46.0f/1024.0f,
-        84.0f/1024.0f,
-        123.0f/1024.0f,
-        167.0f/1024.0f,
-        215.0f/1024.0f,
-        264.0f/1024.0f
-    };
+            fast_log<W, I, T> sum =  fast_log<W, I, T>(0) ;
 
-    const ac_fixed<W-I+1, 1, 0>
-    alpha_antilog_lut[8] = {
-        92.0f/128.0f,
-        93.0f/128.0f,
-        111.0f/128.0f,
-        121.0f/128.0f,
-        132.0f/128.0f,
-        143.0f/128.0f,
-        155.0f/128.0f,
-        169.0f/128.0f
-    };
+                sum = A * B + C;
 
-    const ac_fixed<W-I+1, 1, 0> 
-    beta_antilog_lut[8] = {
-        1024.0f/1024.0f,
-        1015.0f/1024.0f,
-        995.0f/1024.0f,
-        964.0f/1024.0f,
-        924.0f/1024.0f,
-        864.0f/1024.0f,
-        792.0f/1024.0f,
-        295.0f/1024.0f
-    };
-
-
+            num = sum.num;
+        }
 };
 
 

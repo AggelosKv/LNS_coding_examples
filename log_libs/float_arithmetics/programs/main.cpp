@@ -60,10 +60,10 @@ int main(int argc, char* argv[]) {
     fast_log_num1 = num1;
     fast_log_num2 = num2;
 
-     fast_log_num1.div_by_sqrt(fast_log_num2);// / fast_log_num2;
-     fast_log_ans = fast_log_num1;
+     //fast_log_num1.div_by_sqrt(fast_log_num2);// / fast_log_num2;
+     fast_log_ans = fast_log_num1 * fast_log_num2;
      
-    correct = num1 / sqrt(num2);
+    correct = num1 * num2;
     error = 0.246*correct;
 
     std::cout << "The correct result is :" << correct << "\n";
