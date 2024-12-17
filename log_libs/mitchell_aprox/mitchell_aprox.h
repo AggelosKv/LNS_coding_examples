@@ -95,21 +95,10 @@ class fast_log{
             }
 
             // Shift the binary num right
-            if(one_found == true){
                 temp_num >>= one_place;
-            }
-
 
             // Insert the new integer part
-            if(one_found == true){
                 float_num_out1.num = temp_num + ac_fixed<W, I, true>(one_place);
-            }
-            else{
-                float_num_out1.num = temp_num;
-            }
-
-
-
         }
 
 
