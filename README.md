@@ -1,1 +1,5 @@
-Coding examples for different lns implementations with an intention of creating faster aritmetic units (anything but summary(+) or subtraction(-))
+# LNS_coding_examples
+This Git repository is created with the intension of implementing faster arithmetic operations such multiplication (*), division (/) etc using the conversion to logarithmic domain. The git includes 5 class implementations of various papers and examples while it is developed to be used for High Level Synthesis implementations. The different implementations solve the same problem but with different advantages and drawbacks as most of the time it is a entirely different way of thinking. 
+
+# Explaination of lns conversion
+For example, the costly multiplication of two numbers (num1 * num2) is a simple addition in the logarithmic domain  ( 2^(log2(num1) + log2(num2)) ) and the same applies for the division as a simple subtraction 2^(log2(num1) - log2(num2)). With the same logic all the operations can be created. The addition and subtraction seem to be to expensive that way so they are not advised to be implemented with the logarithmic conversion. Lastly It should be noted that due to the conversion erro a small error is induced in the result. 

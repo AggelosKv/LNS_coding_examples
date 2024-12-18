@@ -9,10 +9,13 @@
 
 template<int W,int E>
 class fast_log{
-    private:
+
+    public:
+
+        ac_std_float<W,E> num;
+        
 
         ac_std_float<W,E> one;
-
 
         ac_int<W,false> e_bias ;    // exponent bias shifted by W-E bits
 
@@ -44,11 +47,6 @@ class fast_log{
         ac_fixed<W,E> inv_sqrt_fault;
 
         ac_fixed<W,E> div_by_sqrt_fault; 
-
-    public:
-
-        ac_std_float<W,E> num;
-        
 
         // Constructors
         fast_log() {
