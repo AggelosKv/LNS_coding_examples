@@ -25,7 +25,7 @@ class iter_mul_num{
             this->operator=(in);
         }
         // Copy constactor
-        iter_mul_num(const iter_mul_num<W,T> &in) {
+        iter_mul_num(const iter_mul_num<W,T,I> &in) {
             this->operator=(in);
         }
         // De-constactor
@@ -73,7 +73,7 @@ class iter_mul_num{
 
 
     // Funtion to convert binary to log and mul using iterations
-    void iter_mul(const iter_mul_num<W, T, I> in_num1, const iter_mul_num<W, T, I> in_num2 , iter_mul_num<W, T> &num_out) {
+    void iter_mul(const iter_mul_num<W, T, I> in_num1, const iter_mul_num<W, T, I> in_num2 , iter_mul_num<W, T, I> &num_out) {
         ac_int<W,false> temp_num1 = ac_int<W,false>(0); // Initialize with zero 
         ac_int<W,false> temp_num2 = ac_int<W,false>(0); // Initialize with zero 
         ac_int<W,false> temp_num3 = ac_int<W,false>(1); // Initialize with zero 
@@ -87,7 +87,7 @@ class iter_mul_num{
         temp_num1 = in_num1.num;
         temp_num2 = in_num2.num;
 
-        num_out = iter_mul_num<W, T>(0);
+        num_out = iter_mul_num<W, T, I>(0);
 
         Iterative_MUL : for (int i = 0; i<I; i++){
 
@@ -154,7 +154,7 @@ class iter_mul_num{
             sign = in[W-1];
         }
         
-        void operator = (const iter_mul_num<W,T> &in) {
+        void operator = (const iter_mul_num<W,T,I> &in) {
             num = in.num;
             sign = in.sign;
         }
@@ -167,8 +167,8 @@ class iter_mul_num{
             num = num << shift; 
             }
 
-        iter_mul_num<W, T> operator + (const iter_mul_num<W, T> &b) {
-            iter_mul_num<W, T> ans_num;
+        iter_mul_num<W, T, I> operator + (const iter_mul_num<W, T, I> &b) {
+            iter_mul_num<W, T, I> ans_num;
             if (!(sign ^ b.sign)){
                 ans_num.num = num + b.num;
                 ans_num.sign = sign;
@@ -186,53 +186,56 @@ class iter_mul_num{
 
         }
 
-            iter_mul_num<W, T> operator - (const iter_mul_num<W, T> &b) {
-            iter_mul_num<W, T> ans_num;
-            if (!(sign ^ b.sign) || (b.sign)){
+        iter_mul_num<W, T, I>operator - (const iter_mul_num<W, T, I>&b) {
+            iter_mul_num<W, T, I>ans_num;
+            if (!(sign ^ b.sign)){
+                if (num>b.num){
+                    ans_num.num = num - b.num;
+                    ans_num.sign = sign;
+                }
+                else{
+                    ans_num.num = b.num - num;
+                    ans_num.sign = !b.sign;
+                }
+            }
+            else {
                 ans_num.num = num + b.num;
                 ans_num.sign = sign;
             }
-            else if (num > b.num){
-                ans_num.num = num - b.num;
-                ans_num.sign = sign;
-            }
-            else{
-                ans_num.num = b.num - num;
-                ans_num.sign = b.sign;
-            }
+
              ans_num.num[W-1] = 0;
             return (ans_num);
 
         }
 
-        iter_mul_num<W, T> operator * (const iter_mul_num<W, T> &b) {
-                iter_mul_num<W, T> ans_num;
+        iter_mul_num<W, T, I> operator * (const iter_mul_num<W, T, I> &b) {
+                iter_mul_num<W, T, I> ans_num;
                 iter_mul(*this, b, ans_num);
                 ans_num.sign = sign ^ b.sign;
             return (ans_num);
 
         }
 
-        iter_mul_num<W, T> &operator *= (const iter_mul_num<W, T> &b) {
+        iter_mul_num<W, T, I> &operator *= (const iter_mul_num<W, T, I> &b) {
             *this = this->operator*(b);
             return *this;
         }
 
-        iter_mul_num<W, T> &operator += (const  iter_mul_num<W, T> &b) {
+        iter_mul_num<W, T, I> &operator += (const  iter_mul_num<W, T, I> &b) {
             *this = this->operator+(b);
             return *this;
         }
 
-        bool operator == (const iter_mul_num<W, T> b) {
+        bool operator == (const iter_mul_num<W, T, I> b) {
             return ((num == b.num) && (sign == b.sign));
         }
 
-        bool operator != (const iter_mul_num<W, T> b) {
+        bool operator != (const iter_mul_num<W, T, I> b) {
             return ((num != b.num) && (sign != b.sign));
         }
 
 
-        bool operator >  (const iter_mul_num<W, T> b) {
+        bool operator >  (const iter_mul_num<W, T, I> b) {
             bool num_a_greater;
             bool num_b_greater;
             bool greater;
@@ -244,7 +247,7 @@ class iter_mul_num{
             return ((sign < b.sign ) || ((sign == b.sign) && (greater)));
         }
 
-        bool operator <  (const iter_mul_num<W, T> b) {
+        bool operator <  (const iter_mul_num<W, T, I> b) {
             bool num_a_less;
             bool num_b_less;
             bool less;
@@ -256,7 +259,7 @@ class iter_mul_num{
             return ((sign > b.sign ) || ((sign == b.sign) && (less)));
         }
 
-        bool operator >= (const iter_mul_num<W, T> b) {
+        bool operator >= (const iter_mul_num<W, T, I> b) {
             bool num_a_greater_eq;
             bool num_b_greater_eq;
             bool greater_eq;
@@ -268,7 +271,7 @@ class iter_mul_num{
             return ((sign < b.sign ) || ((sign == b.sign) && (greater_eq)));
         }
 
-        bool operator <= (const iter_mul_num<W, T> b) {
+        bool operator <= (const iter_mul_num<W, T, I> b) {
             bool num_a_less_eq;
             bool num_b_less_eq;
             bool less_eq;
@@ -281,9 +284,9 @@ class iter_mul_num{
         }
         
         template<int N>
-        void dotProd(iter_mul_num<W, T> A[N],iter_mul_num<W, T> B[N]) {
+        void dotProd(iter_mul_num<W, T, I> A[N],iter_mul_num<W, T, I> B[N]) {
 
-            iter_mul_num<W, T> sum =  iter_mul_num<W, T>(0) ;
+            iter_mul_num<W, T, I> sum =  iter_mul_num<W, T, I>(0) ;
 
             for (int i=0; i<N; i++){
                 sum += A[i] * B[i];
@@ -293,9 +296,9 @@ class iter_mul_num{
             sign = sum.sign;
         }
 
-        void mac(iter_mul_num<W, T> A,iter_mul_num<W, T> B,iter_mul_num<W, T> C) {
+        void mac(iter_mul_num<W, T, I> A,iter_mul_num<W, T, I> B,iter_mul_num<W, T, I> C) {
 
-            iter_mul_num<W, T> sum =  iter_mul_num<W, T>(0) ;
+            iter_mul_num<W, T, I> sum =  iter_mul_num<W, T, I>(0) ;
 
                 sum = A * B + C;
 

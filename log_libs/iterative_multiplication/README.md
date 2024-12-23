@@ -3,7 +3,9 @@ Iterative_multiplication is a C++ header only library for integer arithmetic mul
 
 
 # Explaination
-Inside the header file <iterative_multiplication.h> is described a templated datatype 'iter_mul_num<W,E>' together with a set of operations. The datatype supports different integer widths and signed or unsinged representation depending on the definitions of the widht W and sign T through the template.
+Inside the header file <iterative_multiplication.h> is described a templated datatype 'iter_mul_num<W,E>' together with a set of operations. The datatype supports different integer widths and signed or unsinged representation depending on the definitions of the widht W,sign T and I the number of available iterations of the multiplication operation through the template.
+
+*NOTE: The more the available iterations of the multiplication operations help the algorithm to find the correct answer (error <= 1 (one integer)) even in the most difficult multiplications (Huge numbers need possibly more iterations).
 
 
 Iterative_multiplication depends on ac_int that is available in [HLSLibs](https://github.com/hlslibs/ac_types).
