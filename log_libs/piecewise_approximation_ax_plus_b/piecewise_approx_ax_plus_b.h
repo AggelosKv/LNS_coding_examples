@@ -123,69 +123,9 @@ class fast_log{
          // This function performs the piecewise aproximation to convert the fractional part of a float number to int logarithmic aproximate
         // The input range is only the fraction part 0 <= f < 1 and it is divided in 8 equal spaces
         void LUT_float2log(const ac_fixed<W, I, true> input, ac_fixed<W, I, true> &float_num_out){
-           // std::cout << "The float part first three bit were : " << input.template slc<4>(W-I-3) <<"\n";
-
-            ac_fixed<W, I, true> shift_float_num1;
-            ac_fixed<W, I, true> comp_float_num1;
-            ac_fixed<W, I, true> comp_float_num2;
             ac_fixed<W, I, true> float_num = input;
-            // Check if the first 3 bits are 000
-            if (  float_num.template slc<4>(W-I-3) == 0 ) {
-      
-                float_num = alpha_log_lut[0] *float_num;
-
-            }
-            
-            // Check if the first 3 bits are 001
-            else if (  float_num.template slc<4>(W-I-3) == 1 ) {
-
-                float_num = alpha_log_lut[1] *float_num + beta_log_lut[1];
-
-
-            }
-            // Check if the first 3 bits are 010
-            else if (  float_num.template slc<4>(W-I-3) == 2 ) {
-
-                float_num = alpha_log_lut[2] *float_num + beta_log_lut[2];
-
-
-            }
-            // Check if the first 3 bits are 011
-            else if (  float_num.template slc<4>(W-I-3) == 3 ) {
-
-                float_num = alpha_log_lut[3] *float_num + beta_log_lut[3];
-
-
-            }
-            // Check if the first 3 bits are 100
-            else if (  float_num.template slc<4>(W-I-3) == 4 ) {
-
-                float_num = alpha_log_lut[4] *float_num + beta_log_lut[4];
-
-
-            }
-            // Check if the first 3 bits are 101
-            else if (  float_num.template slc<4>(W-I-3) == 5 ) {
-
-                float_num = alpha_log_lut[5] *float_num + beta_log_lut[5];
-
-
-            }
-            // Check if the first 3 bits are 110
-            else if (  float_num.template slc<4>(W-I-3) == 6 ) {
-
-                float_num = alpha_log_lut[6] *float_num + beta_log_lut[6];
-
-
-            }
-            // Check if the first 3 bits are 111
-            else if (  float_num.template slc<4>(W-I-3) == 7 ) {
-
-                float_num = alpha_log_lut[7] *float_num + beta_log_lut[7];
-
-            }
-            //std::cout << "The float num after the LUT is : " << float_num <<"\n";
-            float_num_out = float_num;
+            ac_fixed<W, I, false> index = float_num.template slc<4>(W-I-3);
+            float_num_out = alpha_log_lut[index.to_ac_int()] *float_num + beta_log_lut[index.to_ac_int()];
         }
 
         // We call this function to make the conversion from a logarithm to a float number
@@ -220,66 +160,12 @@ class fast_log{
         // The input range is only the fraction part 0 <= f < 1 and it is divided in 8 equal spaces
         void LUT_log2float(const ac_fixed<W, I, true> input, ac_fixed<W, I, true> &float_num_out){
 
-           // std::cout << "The float part first three bit were : " << input.template slc<4>(W-I-3) <<"\n";
 
-            ac_fixed<W, I, true> shift_float_num1;
-            ac_fixed<W, I, true> comp_float_num1;
-            ac_fixed<W, I, true> comp_float_num2;
             ac_fixed<W, I, true> float_num = input;
 
+            ac_fixed<3, 0, false> index = float_num.template slc<4>(W-I-3);
 
-            // Check if the first 3 bits are 000
-            if (  float_num.template slc<4>(W-I-3) == 0 ) {
-
-                float_num_out = alpha_antilog_lut[0] *float_num + beta_antilog_lut[0];
-
-            }
-
-            // Check if the first 3 bits are 001
-            else if (  float_num.template slc<4>(W-I-3) == 1 ) {
-
-                float_num_out = alpha_antilog_lut[1] *float_num + beta_antilog_lut[1];
-
-            }
-            // Check if the first 3 bits are 010
-            else if ( float_num.template slc<3>(W-I-3) == 2 ) {
-
-                float_num_out = alpha_antilog_lut[2] *float_num + beta_antilog_lut[2];
-
-            }
-
-            // Check if the first 3 bits are 011
-            else if (  float_num.template slc<4>(W-I-3) == 3 ) {
-
-                float_num_out = alpha_antilog_lut[3] *float_num + beta_antilog_lut[3];
-
-            }
-            
-            // Check if the first 3 bits are 011
-            else if (  float_num.template slc<4>(W-I-3) == 4 ) {
-
-                float_num_out = alpha_antilog_lut[4] *float_num + beta_antilog_lut[4];
-
-            }
-            // Check if the first 3 bits are 101
-            else if (  float_num.template slc<4>(W-I-3) == 5 ) {
-
-                float_num_out = alpha_antilog_lut[5] *float_num + beta_antilog_lut[5];
-
-            }
-            // Check if the first 3 bits are 110
-            else if (  float_num.template slc<4>(W-I-3) == 6 ) {
-
-                float_num_out = alpha_antilog_lut[6] *float_num + beta_antilog_lut[6];
-
-            }
-            
-            // Check if the first 3 bits are 111
-            else if (  float_num.template slc<4>(W-I-3) == 7 ) {
-
-                float_num_out = alpha_antilog_lut[7] *float_num + beta_antilog_lut[7];
-
-            }
+                float_num_out = alpha_antilog_lut[index.to_ac_int()] *float_num + beta_antilog_lut[index.to_ac_int()];
             
         }
 

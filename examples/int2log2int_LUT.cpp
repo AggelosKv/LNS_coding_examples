@@ -911,10 +911,10 @@ int main(int argc, char* argv[]) {
     
     output_en = true;
     // Number of loops
-    int max_iterations = 10000;
+    int max_iterations = 1;
     for (int k = 0; k < max_iterations; k++){
         // Generate and print a random floating-point number below 20000
-     n1 = generateRandomFloat();
+     n1 = 0.52;//generateRandomFloat();
      error = n1 * 0.00130;
     std::cout << "Random floating-point number: " << n1 << std::endl;
 

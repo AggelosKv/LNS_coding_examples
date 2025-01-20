@@ -1,14 +1,9 @@
 # Matrix multiplication implementation
 
-This example provides three different implementations matrix-matrix multiplications using the Fast-Float4HLS library. 
-
-> matrix_mul_basic.cpp : Contains an implementation using the basic operators + and *.
-
-> matrix_mul_fma.cpp   : Contains an implementation using the fma implementation.
-
+This example provides three different implementations matrix-matrix multiplications using the piecewise_approx library. 
 > matrix_mul_dot.cpp    : Contains an implementation using the dot product implementation. 
 
-All implementations are based on the Fast-Float4HLS library. The templatized C++ functions are implemented for HLS using the Catapult HLS tool. The sizes of the two input matrices to be multiplied can be selected through the template parameters ''N'', ''M'' and ''K''. 
+The implementation is based on the piecewise_approx library. The templatized C++ functions are implemented for HLS using the Catapult HLS tool. The sizes of the two input matrices to be multiplied can be selected through the template parameters ''N'', ''M'' and ''K''. 
 
 To synthesize the design on Catapult HLS use the *go_hls.tcl* script. The given examples synthesize the multiplication of two matrices of size 4x4 and 4x2 accordingly. When changing the size of the matrices through the template parameter 
 
