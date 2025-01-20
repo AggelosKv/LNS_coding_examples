@@ -1,6 +1,6 @@
 # 2D Convolution Engine implementation
 
-This is an example implementation of a 2D convolution engine using the Fast-Float4HLS library. The outputs are being calculated using the dot product function of the Fast-Float4HLS library. The implementation can be found in the conv2D.cpp file together with the testbench main function. The conv2D is a templatized C++ function implemented for HLS using the Catapult HLS tool. The template parameters define the size of the input features map (''H'' and ''W'') as well as the size of the kernel (''K'').
+This is an example implementation of a 2D convolution engine using the iterative_multiplication library. The outputs are being calculated using the dot product function of the Fast-Float4HLS library. The implementation can be found in the conv2D.cpp file together with the testbench main function. The conv2D is a templatized C++ function implemented for HLS using the Catapult HLS tool. The template parameters define the size of the input features map (''H'' and ''W'') as well as the size of the kernel (''K'').
 
 To synthesize the design on Catapult HLS use the *go_hls.tcl* script. The given example synthesizes a 2D convolution engine that convolves a 5x5 kernel with a 14x14 input. When changing the template parameters in the source code, that define the design
 

@@ -1288,7 +1288,8 @@ void float_div_inv_sqrt(int* binaryNum1, int* binaryNum2, int* answer, int num_o
 
         // std::cout << "The addition produces:\n";
         // printArray(&binaryNum1[0], num_of_bits, 9);
-       
+
+        //add 172 to y
         binaryAdd(num_of_bits,&binaryNum2[0],num_of_bits,&tempArray[0]);
 
         // Create and add the error
@@ -1296,9 +1297,13 @@ void float_div_inv_sqrt(int* binaryNum1, int* binaryNum2, int* answer, int num_o
         //printArray(&error_Array[0], num_of_bits, error_frac_start);
         shiftRight(&error_Array[0],num_of_bits,9);
         complementCalc2(num_of_bits, &error_Array[0] );
+        //add error to y
         binaryAdd(num_of_bits,&binaryNum2[0],num_of_bits,&error_Array[0]);
 
+        // shift op
         shiftRight(&binaryNum2[0],num_of_bits,1);
+
+        // add temp to x
         binaryAdd(num_of_bits,&binaryNum1[0],num_of_bits,&binaryNum2[0]);
 
         if (binaryNum1[0] == 1){
